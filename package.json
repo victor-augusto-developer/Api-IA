@@ -1,0 +1,28 @@
+{
+  "name": "local-api-ia",
+  "version": "1.0.0",
+  "description": "A middleware/proxy API designed to securely integrate, manage, and streamline requests to official Artificial Intelligence APIs.",
+  "homepage": "https://github.com/victor-augusto-developer/Api-IA#readme",
+  "bugs": {
+    "url": "https://github.com/victor-augusto-developer/Api-IA/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victor-augusto-developer/Api-IA.git"
+  },
+  "license": "ISC",
+  "author": "Victor Augusto Gonçalves Valério",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14",
+    "openai": "^6.45.0"
+  }
+}
