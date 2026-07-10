@@ -2,7 +2,16 @@ import initSqlJs from "sql.js";
 import fs from "fs";
 import path from "path";
 
+const databaseDir = "./database";
 const databasePath = "./database/usage.db";
+
+
+if (!fs.existsSync(databaseDir)) {
+
+    fs.mkdirSync(databaseDir, { recursive: true });
+
+}
+
 
 const SQL = await initSqlJs();
 
