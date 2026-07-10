@@ -2,6 +2,10 @@
 
 A middleware and proxy API designed to securely manage, route, and monitor requests to official Artificial Intelligence APIs, providing centralized access, usage tracking, and a built-in analytics dashboard.
 
+## Dashboard Preview
+
+![AI Usage Dashboard](./src/public/images/dashboard.webp)
+
 ## Getting Started
 
 Clone the repository:
