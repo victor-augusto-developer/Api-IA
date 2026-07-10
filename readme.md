@@ -1,0 +1,1 @@
+This project is an AI proxy API built with Node.js and Express that forwards requests to OpenRouter while providing a centralized OpenAI-compatible endpoint, storing usage statistics such as token consumption and response time in SQLite, and exposing a simple dashboard to visualize daily AI usage through interactive charts.
