@@ -1,1 +1,29 @@
-This project is an AI proxy API built with Node.js and Express that forwards requests to OpenRouter while providing a centralized OpenAI-compatible endpoint, storing usage statistics such as token consumption and response time in SQLite, and exposing a simple dashboard to visualize daily AI usage through interactive charts.
+# AI Proxy API
+
+A middleware and proxy API designed to securely manage, route, and monitor requests to official Artificial Intelligence APIs, providing centralized access, usage tracking, and a built-in analytics dashboard.
+
+## Getting Started
+
+Clone the repository:
+
+```bash
+git clone https://github.com/victor-augusto-developer/Api-IA.git
+```
+
+Go to the project folder:
+
+```bash
+cd Api-IA
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the server:
+
+```bash
+npm start
+```
