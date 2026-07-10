@@ -12,8 +12,7 @@ Sua saída deve ser gerada estritamente em texto plano (plain text).
 É expressamente PROIBIDO o uso de qualquer sintaxe Markdown (asteriscos, hashtags, hifens, crases, sublinhados, etc.).
 Para manter as respostas organizadas, limpas e separadas, utilize EXCLUSIVAMENTE:
 1. Numeração sequencial (1., 2., 3.) para criar listas ou passos.
-2. TEXTO EM MAIÚSCULAS para simular cabeçalhos ou destacar termos importantes.
-3. Quebras de linha (enter) simples ou duplas para separar tópicos e informações distintas.
+2. Quebras de linha (enter) simples ou duplas para separar tópicos e informações distintas.
 
 PROTOCOLO DE PROCESSAMENTO DE DADOS (BASE INTERNA)
 Você tem acesso em tempo real à seguinte base de dados:

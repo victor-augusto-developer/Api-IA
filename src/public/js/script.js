@@ -126,6 +126,16 @@
     wrapper.appendChild(empty);
   }
 
+  function removeEmptyState(canvas) {
+  const wrapper = canvas.closest(".chart-card__canvas-wrapper");
+  if (!wrapper) return;
+
+  const empty = wrapper.querySelector(".chart-empty-state");
+  if (empty) empty.remove();
+
+  canvas.style.display = "";
+}
+
   function createChart(labels, values) {
     const canvas = document.getElementById("usageChart");
     if (!canvas) return null;
@@ -337,7 +347,13 @@
 
         const { labels, values } = normalizeUsage(usage);
 
-        updateChart(labels, values);
+        if (!chartInstance && values.length) {
+  const canvas = document.getElementById("usageChart");
+  if (canvas) removeEmptyState(canvas);
+  chartInstance = createChart(labels, values);
+} else {
+  updateChart(labels, values);
+}
         updateStats(values, labels);
         updateTrend(values);
         updateLastUpdatedLabel();
