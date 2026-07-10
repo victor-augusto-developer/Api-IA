@@ -458,9 +458,246 @@
     confirmBtn.addEventListener("click", confirmDeleteDatabase);
   }
 
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function getChatEls() {
+    return {
+      messages: document.getElementById("chat-messages"),
+      emptyState: document.getElementById("chat-empty-state"),
+      form: document.getElementById("chat-form"),
+      input: document.getElementById("chat-input"),
+      sendBtn: document.getElementById("chat-send-btn"),
+      clearBtn: document.getElementById("chat-clear-btn"),
+    };
+  }
+
+  const chatHistory = [];
+  let chatIsWaiting = false;
+
+  function formatChatTime() {
+    return new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
+  function scrollChatToBottom(messagesEl) {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function appendChatMessage(role, content, options = {}) {
+    const { messages, emptyState } = getChatEls();
+    if (!messages) return null;
+
+    if (emptyState && emptyState.parentElement) {
+      emptyState.remove();
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = `chat-message chat-message--${role}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = "chat-message__avatar";
+    avatar.textContent = role === "user" ? "Você".slice(0, 1) : "IA";
+
+    const body = document.createElement("div");
+    body.className = "chat-message__body";
+
+    const bubble = document.createElement("div");
+    bubble.className = "chat-message__bubble";
+    if (options.isError) bubble.classList.add("chat-message__bubble--error");
+    bubble.textContent = content;
+
+    const time = document.createElement("span");
+    time.className = "chat-message__time";
+    time.textContent = formatChatTime();
+
+    body.appendChild(bubble);
+    body.appendChild(time);
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(body);
+    messages.appendChild(wrapper);
+
+    scrollChatToBottom(messages);
+
+    return bubble;
+  }
+
+  function showChatTyping() {
+    const { messages, emptyState } = getChatEls();
+    if (!messages) return null;
+    if (emptyState && emptyState.parentElement) emptyState.remove();
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-message chat-message--assistant";
+    wrapper.id = "chat-typing-indicator";
+
+    const avatar = document.createElement("div");
+    avatar.className = "chat-message__avatar";
+    avatar.textContent = "IA";
+
+    const body = document.createElement("div");
+    body.className = "chat-message__body";
+
+    const bubble = document.createElement("div");
+    bubble.className = "chat-message__bubble";
+    bubble.innerHTML = '<span class="chat-typing"><span></span><span></span><span></span></span>';
+
+    body.appendChild(bubble);
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(body);
+    messages.appendChild(wrapper);
+
+    scrollChatToBottom(messages);
+    return wrapper;
+  }
+
+  function removeChatTyping() {
+    const typing = document.getElementById("chat-typing-indicator");
+    if (typing) typing.remove();
+  }
+
+  function setChatWaiting(isWaiting) {
+    chatIsWaiting = isWaiting;
+    const { input, sendBtn } = getChatEls();
+    if (sendBtn) sendBtn.disabled = isWaiting || !input || !input.value.trim();
+    if (input) input.disabled = isWaiting;
+  }
+
+  function autoResizeChatInput(input) {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, 140)}px`;
+  }
+
+  async function sendChatMessage(message) {
+    appendChatMessage("user", message);
+    chatHistory.push({ role: "user", content: message });
+
+    setChatWaiting(true);
+    showChatTyping();
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          message: message,
+          history: chatHistory.slice(0, -1),
+        }),
+      });
+
+      removeChatTyping();
+
+      if (!response.ok) {
+        console.warn(`[AI Usage Dashboard] POST /api/chat retornou ${response.status}`);
+        appendChatMessage(
+          "assistant",
+          "Não foi possível obter uma resposta agora. Tente novamente em instantes.",
+          { isError: true }
+        );
+        return;
+      }
+
+      const result = await response.json();
+
+      if (!result || typeof result.response !== "string") {
+        appendChatMessage(
+          "assistant",
+          "A resposta recebida veio em um formato inesperado.",
+          { isError: true }
+        );
+        return;
+      }
+
+      appendChatMessage("assistant", result.response);
+      chatHistory.push({ role: "assistant", content: result.response });
+    } catch (err) {
+      console.error("[AI Usage Dashboard]", err);
+      removeChatTyping();
+      appendChatMessage(
+        "assistant",
+        "Erro de conexão ao falar com a IA. Verifique sua rede e tente novamente.",
+        { isError: true }
+      );
+    } finally {
+      setChatWaiting(false);
+    }
+  }
+
+  function clearChatConversation() {
+    const { messages, input } = getChatEls();
+    if (!messages) return;
+
+    chatHistory.length = 0;
+    messages.innerHTML = "";
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "chat-empty-state";
+    emptyState.id = "chat-empty-state";
+    emptyState.innerHTML = `
+      <div class="chat-empty-state__icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3097 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60557 8.7 3.9C9.87812 3.30493 11.1801 2.99656 12.5 3H13C15.0843 3.11499 17.053 3.99476 18.5291 5.47087C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="chat-empty-state__title">Comece uma conversa</p>
+      <p class="chat-empty-state__subtitle">Envie uma mensagem para conversar com a IA</p>
+    `;
+    messages.appendChild(emptyState);
+
+    if (input) {
+      input.value = "";
+      autoResizeChatInput(input);
+      input.focus();
+    }
+
+    setChatWaiting(false);
+  }
+
+  function initChat() {
+    const { form, input, sendBtn, clearBtn } = getChatEls();
+    if (!form || !input || !sendBtn) return;
+
+    input.addEventListener("input", () => {
+      autoResizeChatInput(input);
+      sendBtn.disabled = chatIsWaiting || !input.value.trim();
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        if (!sendBtn.disabled) form.requestSubmit();
+      }
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const message = input.value.trim();
+      if (!message || chatIsWaiting) return;
+
+      input.value = "";
+      autoResizeChatInput(input);
+      sendBtn.disabled = true;
+
+      sendChatMessage(message);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", clearChatConversation);
+    }
+  }
+
   function init() {
     revealPage();
     initDeleteDatabaseButton();
+    initChat();
 
     const initialUsage = typeof usage !== "undefined" ? usage : [];
     lastUsageSnapshot = JSON.stringify(initialUsage);

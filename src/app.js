@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 import dashboardRoute from "./routes/dashboard.routes.js";
 import apiroute from "./routes/api.routes.js";
+import chatRoute from "./routes/chat.route.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +23,7 @@ import { init } from "./database/index.js";
 await init();
 
 app.use("/v1", apiroute);
+app.use("/api", chatRoute);
 app.use("/", dashboardRoute);
 
 

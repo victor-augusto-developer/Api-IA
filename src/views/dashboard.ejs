@@ -91,6 +91,56 @@
         </div>
       </section>
 
+      <section class="card chat-card">
+        <div class="chat-card__header">
+          <div>
+            <h2 class="chat-card__title">Assistente IA</h2>
+            <p class="chat-card__subtitle">Converse com a IA para tirar dúvidas sobre o painel ou qualquer outro assunto</p>
+          </div>
+          <button type="button" class="btn btn--ghost btn--sm" id="chat-clear-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 6H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19 6L18.2987 19.2687C18.2645 19.9245 17.7222 20.4444 17.0655 20.4444H6.93453C6.27779 20.4444 5.73551 19.9245 5.70125 19.2687L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Limpar
+          </button>
+        </div>
+
+        <div class="chat-card__messages" id="chat-messages">
+          <div class="chat-empty-state" id="chat-empty-state">
+            <div class="chat-empty-state__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3097 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60557 8.7 3.9C9.87812 3.30493 11.1801 2.99656 12.5 3H13C15.0843 3.11499 17.053 3.99476 18.5291 5.47087C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="chat-empty-state__title">Comece uma conversa</p>
+            <p class="chat-empty-state__subtitle">Envie uma mensagem para conversar com a IA</p>
+          </div>
+        </div>
+
+        <form class="chat-card__form" id="chat-form">
+          <div class="chat-card__input-wrapper">
+            <textarea
+              class="chat-card__input"
+              id="chat-input"
+              placeholder="Envie uma mensagem..."
+              rows="1"
+              autocomplete="off"
+              spellcheck="false"
+              maxlength="4000"
+            ></textarea>
+            <button type="submit" class="chat-card__send" id="chat-send-btn" disabled aria-label="Enviar mensagem">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13 6L19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="chat-card__hint">Pressione <kbd>Enter</kbd> para enviar &middot; <kbd>Shift</kbd> + <kbd>Enter</kbd> para nova linha</p>
+        </form>
+      </section>
+
       <section class="card danger-card">
         <div class="danger-card__info">
           <h2 class="danger-card__title">Zona de perigo</h2>

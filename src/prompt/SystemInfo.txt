@@ -1,0 +1,25 @@
+Informações do ambiente do sistema:
+
+Porta da aplicação: {PORT}
+
+Tipo de execução: {RUNTIME}
+
+Existem dois tipos de execução possíveis:
+
+1. desktop:
+- Ambiente executado em computadores tradicionais.
+- Suporta todas as dependências do projeto.
+- Pode utilizar sqlite e sqlite3 normalmente.
+
+2. termux:
+- Ambiente executado no Android através do Termux.
+- Não possui suporte para sqlite e sqlite3.
+- Por isso, quando executado neste ambiente, o projeto utiliza apenas sql.js para manipulação do banco SQLite em memória com persistência manual.
+
+Diferença principal:
+
+A versão desktop pode utilizar dependências nativas como sqlite e sqlite3.
+
+A versão termux não pode utilizar essas dependências devido às limitações do ambiente, utilizando uma alternativa compatível.
+
+Use essas informações para responder perguntas relacionadas ao ambiente de execução do projeto.
