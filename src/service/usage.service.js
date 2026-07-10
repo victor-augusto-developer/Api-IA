@@ -1,5 +1,4 @@
-
-import db from "../database/database.js";
+import {db} from "../database/index.js";
 
 let DailyTokens = null;
 
@@ -50,15 +49,8 @@ export async function ResetDatabase() {
 
     const database = await db;
 
-    await database.exec(`
-        BEGIN;
-
+    await database.run(`
         DELETE FROM ai_usage;
-
-        DELETE FROM sqlite_sequence
-        WHERE name = 'ai_usage';
-
-        COMMIT;
     `);
 
     ClearCache();

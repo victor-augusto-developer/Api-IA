@@ -1,3 +1,4 @@
 .env
+.env.termux
 node_modules
 database/usage.db

@@ -3,7 +3,6 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { initDatabase } from "./database/init.js";
 import dashboardRoute from "./routes/dashboard.routes.js";
 import apiroute from "./routes/api.routes.js";
 
@@ -19,7 +18,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-await initDatabase();
+import { init } from "./database/index.js";
+await init();
+
 app.use("/v1", apiroute);
 app.use("/", dashboardRoute);
 
