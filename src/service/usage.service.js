@@ -46,6 +46,25 @@ export async function getDailyTokens() {
 
 }
 
+export async function ResetDatabase() {
+
+    const database = await db;
+
+    await database.exec(`
+        BEGIN;
+
+        DELETE FROM ai_usage;
+
+        DELETE FROM sqlite_sequence
+        WHERE name = 'ai_usage';
+
+        COMMIT;
+    `);
+
+    ClearCache();
+
+}
+
 export async function GetDailyTokensCache() {
 
     if (DailyTokens !== null) {

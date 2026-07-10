@@ -361,6 +361,208 @@ body {
 }
 
 
+.danger-card {
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-color: rgba(248, 81, 73, 0.18);
+  animation-delay: 200ms;
+}
+
+.danger-card:hover {
+  border-color: rgba(248, 81, 73, 0.32);
+  background: var(--surface);
+}
+
+.danger-card__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.danger-card__subtitle {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast),
+              opacity var(--transition-fast);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn--danger {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: rgba(248, 81, 73, 0.28);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.btn--ghost {
+  color: var(--text-secondary);
+  background: transparent;
+  border-color: var(--border-color);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+  border-color: var(--border-color-strong);
+}
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-overlay.is-visible {
+  opacity: 1;
+}
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-color-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  transform: translateY(8px) scale(0.98);
+  opacity: 0;
+  transition: transform var(--transition-medium), opacity var(--transition-medium);
+}
+
+.modal-overlay.is-visible .modal {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.modal__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.modal__title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.modal__desc {
+  margin-top: 8px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.modal__confirm-label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.modal__confirm-label strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.modal__input {
+  width: 100%;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.modal__input:focus {
+  border-color: var(--danger);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.modal__actions .btn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+  .modal__actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
 .footer {
   margin-top: 40px;
   text-align: center;
@@ -400,5 +602,14 @@ body {
 
   .chart-card__canvas-wrapper {
     height: 280px;
+  }
+
+  .danger-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn--danger {
+    justify-content: center;
   }
 }

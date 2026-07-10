@@ -356,8 +356,111 @@
     setInterval(pollUsage, POLL_INTERVAL_MS);
   }
 
+  function getModalEls() {
+    return {
+      overlay: document.getElementById("delete-modal-overlay"),
+      input: document.getElementById("delete-modal-input"),
+      cancelBtn: document.getElementById("delete-modal-cancel"),
+      confirmBtn: document.getElementById("delete-modal-confirm"),
+      triggerBtn: document.getElementById("delete-database-btn"),
+    };
+  }
+
+  function openDeleteModal() {
+    const { overlay, input, confirmBtn } = getModalEls();
+    if (!overlay) return;
+
+    overlay.hidden = false;
+    input.value = "";
+    confirmBtn.disabled = true;
+
+    requestAnimationFrame(() => {
+      overlay.classList.add("is-visible");
+      input.focus();
+    });
+
+    document.addEventListener("keydown", handleModalKeydown);
+  }
+
+  function closeDeleteModal() {
+    const { overlay } = getModalEls();
+    if (!overlay) return;
+
+    overlay.classList.remove("is-visible");
+    document.removeEventListener("keydown", handleModalKeydown);
+
+    setTimeout(() => {
+      overlay.hidden = true;
+    }, 260);
+
+    const { triggerBtn } = getModalEls();
+    if (triggerBtn) triggerBtn.focus();
+  }
+
+  function handleModalKeydown(event) {
+    if (event.key === "Escape") {
+      closeDeleteModal();
+    }
+  }
+
+  async function confirmDeleteDatabase() {
+    const { overlay, confirmBtn } = getModalEls();
+    if (!confirmBtn) return;
+
+    const originalLabel = confirmBtn.textContent;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "Apagando...";
+
+    try {
+      const response = await fetch("/database", {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        console.warn(`[AI Usage Dashboard] DELETE /database retornou ${response.status}`);
+        window.alert("Não foi possível apagar o banco de dados. Tente novamente.");
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalLabel;
+        return;
+      }
+
+      closeDeleteModal();
+      window.location.reload();
+    } catch (err) {
+      console.error("[AI Usage Dashboard]", err);
+      window.alert("Erro ao apagar o banco de dados. Verifique sua conexão.");
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = originalLabel;
+    }
+  }
+
+  function initDeleteDatabaseButton() {
+    const { overlay, input, cancelBtn, confirmBtn, triggerBtn } = getModalEls();
+    if (!triggerBtn || !overlay) return;
+
+    triggerBtn.addEventListener("click", openDeleteModal);
+    cancelBtn.addEventListener("click", closeDeleteModal);
+
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) closeDeleteModal();
+    });
+
+    input.addEventListener("input", () => {
+      confirmBtn.disabled = input.value.trim() !== "DELETE";
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !confirmBtn.disabled) {
+        confirmDeleteDatabase();
+      }
+    });
+
+    confirmBtn.addEventListener("click", confirmDeleteDatabase);
+  }
+
   function init() {
     revealPage();
+    initDeleteDatabaseButton();
 
     const initialUsage = typeof usage !== "undefined" ? usage : [];
     lastUsageSnapshot = JSON.stringify(initialUsage);

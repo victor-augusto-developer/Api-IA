@@ -91,6 +91,21 @@
         </div>
       </section>
 
+      <section class="card danger-card">
+        <div class="danger-card__info">
+          <h2 class="danger-card__title">Zona de perigo</h2>
+          <p class="danger-card__subtitle">Apaga permanentemente todos os dados armazenados no banco de dados. Essa ação não pode ser desfeita.</p>
+        </div>
+        <button type="button" class="btn btn--danger" id="delete-database-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 6H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M8 6V4C8 3.44772 8.44772 3 9 3H15C15.5523 3 16 3.44772 16 4V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19 6L18.2987 19.2687C18.2645 19.9245 17.7222 20.4444 17.0655 20.4444H6.93453C6.27779 20.4444 5.73551 19.9245 5.70125 19.2687L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Delete Database
+        </button>
+      </section>
+
     </main>
 
     <footer class="footer">
@@ -101,6 +116,40 @@
       </p>
     </footer>
 
+  </div>
+
+  <div class="modal-overlay" id="delete-modal-overlay" hidden>
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-desc">
+      <div class="modal__icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M12 16.5V16.51" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M10.29 3.86L1.82 18A1.5 1.5 0 003.11 20.25H20.89A1.5 1.5 0 0022.18 18L13.71 3.86A1.5 1.5 0 0010.29 3.86Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h2 class="modal__title" id="delete-modal-title">Apagar banco de dados</h2>
+      <p class="modal__desc" id="delete-modal-desc">
+        Esta ação vai apagar permanentemente todos os dados de consumo armazenados. Isso não pode ser desfeito.
+      </p>
+
+      <label class="modal__confirm-label" for="delete-modal-input">
+        Digite <strong>DELETE</strong> para confirmar
+      </label>
+      <input
+        type="text"
+        class="modal__input"
+        id="delete-modal-input"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="DELETE"
+      />
+
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" id="delete-modal-cancel">Cancelar</button>
+        <button type="button" class="btn btn--danger" id="delete-modal-confirm" disabled>Apagar banco de dados</button>
+      </div>
+    </div>
   </div>
 
   <script>
